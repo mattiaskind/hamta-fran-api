@@ -70,6 +70,16 @@ button {
     'item2 item4'
     'item3 item4';
   align-items: stretch;
+  animation: fadein 1s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .item1 {

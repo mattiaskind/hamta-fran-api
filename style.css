@@ -42,7 +42,7 @@ a:hover {
   display: block;
   font-size: 3rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 1);
+  color: black;
 }
 
 img {
@@ -169,4 +169,5 @@ button {
 
 .hidden {
   display: none;
+  animation: fadein 1s;
 }

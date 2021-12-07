@@ -9,28 +9,74 @@ const releaseDate = document.querySelector('.release-date');
 const runningTime = document.querySelector('.running-time');
 const description = document.querySelector('.description');
 const image = document.querySelector('.image');
+const filmsListContainer = document.querySelector('.films-list-container');
+const filmsUl = document.querySelector('.films-list');
+
+let firstReq = true;
+
+filmsUl.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (e.target.tagName !== 'A') return;
+  const filmId = e.target.pathname.substring(1);
+
+  const req = new XMLHttpRequest();
+  req.open('GET', `https://ghibliapi.herokuapp.com/films/${filmId}`);
+  req.onload = function () {
+    const res = JSON.parse(this.response);
+    filmsListContainer.classList.add('hidden');
+    renderFilm(res);
+  };
+  req.send();
+});
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
+  if (!firstReq) {
+    wrapper.classList.add('hidden');
+  }
+  firstReq = false;
 
   const req = new XMLHttpRequest();
   req.open('GET', `https://ghibliapi.herokuapp.com/films?title=${input.value}`);
   req.onload = function () {
     const res = JSON.parse(this.response);
-    console.log(res);
-    if (res.length === 0) return console.log('TOMT FÄLT');
 
-    title.innerText = res[0].title;
-    director.innerText = res[0].director;
-    producer.innerText = res[0].producer;
-    releaseDate.innerText = res[0].release_date;
-    runningTime.innerText = res[0].running_time;
-    description.innerText = res[0].description;
-    image.innerHTML = `<img src="${res[0].image}">`;
-    if (wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
+    // Om man inte får några resultat visas en klickbar lista med filmer
+    if (res.length === 0) {
+      req.open('GET', `https://ghibliapi.herokuapp.com/films`);
+      req.onload = function () {
+        html = '';
+        filmsUl.innerHTML = '';
+        const res = JSON.parse(this.response);
+        res.forEach((film) => {
+          html += `<li><a href="${film.id}">${film.title}</a></li>`;
+        });
+        filmsListContainer.classList.remove('hidden');
+        filmsUl.insertAdjacentHTML('afterbegin', html);
+      };
+      req.send();
+    } else {
+      if (!filmsListContainer.classList.contains('hidden')) {
+        filmsListContainer.classList.add('hidden');
+      }
+
+      renderFilm(res[0]);
+    }
   };
-
   req.send();
 });
 
-//https://ghibliapi.herokuapp.com/films
+function renderFilm(res) {
+  title.innerText = res.title;
+  director.innerText = res.director;
+  producer.innerText = res.producer;
+  releaseDate.innerText = res.release_date;
+  runningTime.innerText = res.running_time + ' min';
+  description.innerText = res.description;
+  image.innerHTML = `<img src="${res.image}">`;
+
+  if (wrapper.classList.contains('hidden')) wrapper.classList.remove('hidden');
+  input.value = '';
+  input.focus();
+}

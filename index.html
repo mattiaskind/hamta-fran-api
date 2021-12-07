@@ -5,15 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hämta från api</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
   </head>
   <body>
+    <div class="logo">Search Studio Ghibli films</div>
+
     <div class="search-box">
       <form>
         <input type="text" id="input" />
         <button>SEARCH</button>
       </form>
+    </div>
+
+    <div class="films-list-container hidden">
+      <p><span class="films-list-info-title">Sorry, but we did not get a search!</span></p>
+      <p>But, feel free to choose one of the movies below.😀</p>
+
+      <ul class="films-list"></ul>
     </div>
 
     <div class="wrapper hidden">

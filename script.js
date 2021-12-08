@@ -1,6 +1,7 @@
 const form = document.querySelector('form');
 const input = document.querySelector('#input');
 
+const overlay = document.querySelector('.overlay');
 const wrapper = document.querySelector('.wrapper');
 const title = document.querySelector('.title-big');
 const director = document.querySelector('.director');

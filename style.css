@@ -25,6 +25,12 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.6rem;
 }
+.overlay {
+  width: 800px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: -1px 2px 5px rgba(0, 0, 0, 0.2);
+}
 
 a {
   color: rgba(12, 116, 117, 1);

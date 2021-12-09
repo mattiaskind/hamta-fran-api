@@ -18,7 +18,9 @@ let firstReq = true;
 filmsUl.addEventListener('click', (e) => {
   e.preventDefault();
   if (e.target.tagName !== 'A') return;
-  const filmId = e.target.pathname.substring(1);
+  pathName = e.target.href;
+  const filmId = pathName.substring(pathName.indexOf('#') + 1);
+  // const filmId = e.target.pathname.substring(e.target);
 
   const req = new XMLHttpRequest();
   req.open('GET', `https://ghibliapi.herokuapp.com/films/${filmId}`);
@@ -38,6 +40,10 @@ form.addEventListener('submit', (e) => {
   }
   firstReq = false;
 
+  // Det går bara att sökta på bokstäver och mellanslag. Minst två tecken krävs
+  // Det ska även gå att klicka på sök utan att skriva något, då vsas en lista
+  if (input.value && !/^[a-ö, ]{2,}$/i.test(input.value)) return;
+
   const req = new XMLHttpRequest();
   req.open('GET', `https://ghibliapi.herokuapp.com/films?title=${input.value}`);
   req.onload = function () {
@@ -51,7 +57,7 @@ form.addEventListener('submit', (e) => {
         filmsUl.innerHTML = '';
         const res = JSON.parse(this.response);
         res.forEach((film) => {
-          html += `<li><a href="${film.id}">${film.title}</a></li>`;
+          html += `<li><a href="#${film.id}">${film.title}</a></li>`;
         });
         filmsListContainer.classList.remove('hidden');
         filmsUl.insertAdjacentHTML('afterbegin', html);
@@ -61,7 +67,6 @@ form.addEventListener('submit', (e) => {
       if (!filmsListContainer.classList.contains('hidden')) {
         filmsListContainer.classList.add('hidden');
       }
-
       renderFilm(res[0]);
     }
   };

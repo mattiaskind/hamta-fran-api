@@ -44,8 +44,28 @@ form.addEventListener('submit', (e) => {
   // Det ska även gå att klicka på sök utan att skriva något, då vsas en lista
   if (input.value && !/^[a-ö, ]{2,}$/i.test(input.value)) return;
 
+  // Anpassa söksträngen så att det inte spelar någon roll om sökningen görs
+  // med versaler/gemener så länge orden är de rätta.
+  const words = ['in', 'the', 'of', 'from', 'on'];
+  let searchFor = '';
+  if (input.value) {
+    searchFor = input.value
+      .toLowerCase()
+      .split(' ')
+      .map((word, index) => {
+        if (index === 0) {
+          return word[0].toUpperCase() + word.substring(1);
+        } else if (words.includes(word.toLowerCase())) {
+          return word.toLowerCase();
+        } else {
+          return word[0].toUpperCase() + word.substring(1);
+        }
+      })
+      .join(' ');
+  }
+
   const req = new XMLHttpRequest();
-  req.open('GET', `https://ghibliapi.herokuapp.com/films?title=${input.value}`);
+  req.open('GET', `https://ghibliapi.herokuapp.com/films?title=${searchFor}`);
   req.onload = function () {
     const res = JSON.parse(this.response);
 
